@@ -16,6 +16,7 @@ const addresses = {
   ropsten: "0x31f42841c2db5173425b5223809cf3a38fede360",
   rinkeby: "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea",
   mainnet: "0x6b175474e89094c44da98b954eedeac495271d0f",
+  mumbai: "0xfe4F5145f6e09952a5ba9e956ED0C25e3Fa4c7F1",
 };
 
 // Get the address of the Pool Contract for the given environment
@@ -29,6 +30,8 @@ export function daiTokenAddress(environment: ethereum.Environment): string {
       return addresses.rinkeby;
     case ethereum.Environment.Mainnet:
       return addresses.mainnet;
+    case ethereum.Environment.Mumbai:
+      return addresses.mumbai;
   }
 }
 

@@ -16,6 +16,7 @@ const addresses = {
     ropsten: "0xF8F22AA794DDA79aC0C634a381De0226f369bCCe",
     rinkeby: "0x6c7b50EA0AFB02d73AE3846B3B9EBC31808300a6",
     mainnet: "0x4a7DFda4F2e9F062965cC87f775841fB58AEA83e",
+    mumbai: "0x2974d8898C9EAE3aad7828C93d485633DfD6e358",
   },
 };
 
@@ -30,6 +31,8 @@ export function claimsAddress(environment: ethereum.Environment): string {
       return addresses.claims.rinkeby;
     case ethereum.Environment.Mainnet:
       return addresses.claims.mainnet;
+    case ethereum.Environment.Mumbai:
+      return addresses.claims.mumbai;
   }
 }
 

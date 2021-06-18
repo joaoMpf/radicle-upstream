@@ -76,6 +76,10 @@ function getProvider(
         "mainnet",
         "7a19a4bf0af84fcc86ffb693a257fad4"
       );
+    case ethereum.Environment.Mumbai:
+      return new ethers.providers.JsonRpcProvider(
+        "https://matic-mumbai.chainstacklabs.com"
+      );
   }
 }
 

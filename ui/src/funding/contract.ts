@@ -16,6 +16,7 @@ const addresses = {
   local: "0x56a32c0c857f1ae733562078a693ea845d9bb423",
   ropsten: "0x22B39d2F5768CE402077223b3f871d9b4393A5f2",
   rinkeby: "0x8c6E1E293346cc4cD31A1972D94DaDcecEd98997",
+  mumbai: "0x8a447342dd9298e82027a99cA9c470236b021371",
 };
 
 interface SenderUpdatedArgs {
@@ -55,6 +56,8 @@ export function poolAddress(environment: ethereum.Environment): string {
         code: error.Code.FeatureNotAvailableForGivenNetwork,
         message: "Token streaming contracts are not yet deployed on mainnet",
       });
+    case ethereum.Environment.Mumbai:
+      return addresses.mumbai;
   }
 }
 
