@@ -16,6 +16,7 @@ const addresses = {
     ropsten: "0xF8F22AA794DDA79aC0C634a381De0226f369bCCe",
     rinkeby: "0x6c7b50EA0AFB02d73AE3846B3B9EBC31808300a6",
     mainnet: "0x4a7DFda4F2e9F062965cC87f775841fB58AEA83e",
+    optimismKovan: "0xc9241Cf4cD7d9569cA044d8202EF1080405Bc6C9",
   },
 };
 
@@ -30,6 +31,8 @@ export function claimsAddress(environment: ethereum.Environment): string {
       return addresses.claims.rinkeby;
     case ethereum.Environment.Mainnet:
       return addresses.claims.mainnet;
+    case ethereum.Environment.OptimismKovan:
+      return addresses.claims.optimismKovan;
   }
 }
 

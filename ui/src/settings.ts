@@ -89,6 +89,10 @@ export const fundingEnvironmentOptions: Option<ethereum.Environment>[] = [
     title: ethereum.Environment.Mainnet.toString(),
     value: ethereum.Environment.Mainnet,
   },
+  {
+    title: ethereum.Environment.OptimismKovan.toString(),
+    value: ethereum.Environment.OptimismKovan,
+  },
 ];
 
 // gives back the OS you're using in hotkeys.svelte & shortcuts.svelte

@@ -16,6 +16,8 @@ export enum Environment {
   Rinkeby = "Rinkeby",
   // Production deployment
   Mainnet = "Mainnet",
+  // Optimism testnet
+  OptimismKovan = "OptimismKovan",
 }
 
 // The ethereum networks we may parse from a connected wallet across
@@ -25,6 +27,7 @@ export enum Network {
   Ropsten = "Ropsten",
   Rinkeby = "Rinkeby",
   Mainnet = "Mainnet",
+  OptimismKovan = "OptimismKovan",
   Other = "Other",
 }
 
@@ -39,6 +42,8 @@ export function supportedNetwork(environment: Environment): Network {
       return Network.Rinkeby;
     case Environment.Mainnet:
       return Network.Mainnet;
+    case Environment.OptimismKovan:
+      return Network.OptimismKovan;
   }
 }
 
@@ -52,6 +57,8 @@ export function networkFromChainId(chainId: number): Network {
       return Network.Ropsten;
     case 4:
       return Network.Rinkeby;
+    case 69:
+      return Network.OptimismKovan;
     default:
       return Network.Other;
   }
@@ -60,7 +67,7 @@ export function networkFromChainId(chainId: number): Network {
 // The store where the selected Ethereum environment is persisted.
 export const selectedEnvironment = persistentStore.local.writable<Environment>(
   "ethereum-environment-v0",
-  config.isDev ? Environment.Rinkeby : Environment.Mainnet
+  config.isDev ? Environment.OptimismKovan : Environment.Mainnet
 );
 
 // EIP-20 token decimals for the tokens we operate with across

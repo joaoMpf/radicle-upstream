@@ -76,6 +76,8 @@ function getProvider(
         "mainnet",
         "7a19a4bf0af84fcc86ffb693a257fad4"
       );
+    case ethereum.Environment.OptimismKovan:
+      return new ethers.providers.JsonRpcProvider("https://kovan.optimism.io");
   }
 }
 
@@ -175,7 +177,9 @@ function build(
   // Load the data of the connected account.
   async function loadAccountData() {
     try {
-      const accountAddress = await signer.getAddress();
+      const accountAddressRaw = await signer.getAddress();
+      // WalletConnect may return a non-EIP-55 address
+      const accountAddress = ethers.utils.getAddress(accountAddressRaw);
       const daiBalance = await daiTokenContract
         .balanceOf(accountAddress)
         .then(ethereum.toBaseUnit);
