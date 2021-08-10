@@ -173,7 +173,7 @@ context("patches", () => {
     });
   });
 
-  it(
+  it.only(
     "replicates a patch from contributor to maintainer",
     // Project replication may take longer than the default timeout.
     { defaultCommandTimeout: 8000 },

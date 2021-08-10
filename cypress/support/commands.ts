@@ -47,7 +47,9 @@ export const withTempDir = (callback: (tempDirPath: string) => void): void => {
   cy.exec(
     `set -euo pipefail
     mkdir -p "${TMP_DIR_ROOT}"
-    temp_dir=$(mktemp -d "${TMP_DIR_ROOT}/${testName}.XXXX")
+    temp_dir="${TMP_DIR_ROOT}/${testName}"
+    rm -rf "$temp_dir"
+    mkdir "$temp_dir"
     chmod a+rx "$temp_dir"
     echo "$temp_dir"`,
     { log: false }
@@ -61,7 +63,7 @@ export const withTempDir = (callback: (tempDirPath: string) => void): void => {
       }),
     });
     callback(path);
-    cy.exec(`rm -r "${path}"`);
+    // cy.exec(`rm -r "${path}"`);
   });
 };
 

@@ -7,7 +7,7 @@
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     api::env::set_if_unset("RUST_BACKTRACE", "full");
-    api::env::set_if_unset("RUST_LOG", "info,quinn=warn");
+    api::env::set_if_unset("RUST_LOG", "info,quinn=warn,radicle_daemon=debug,api=debug");
 
     let builder = tracing_subscriber::fmt()
         .with_writer(std::io::stderr)

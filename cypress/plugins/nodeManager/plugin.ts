@@ -150,6 +150,7 @@ class Node {
         env: {
           ...global.process.env,
           RAD_HOME: this.radHome,
+          TRACING_FMT: "pretty",
           RUST_LOG: [
             "info",
             "api=debug",

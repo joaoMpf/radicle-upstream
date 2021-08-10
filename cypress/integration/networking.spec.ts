@@ -35,7 +35,7 @@ context("p2p networking", () => {
     );
   });
 
-  it(
+  it.only(
     "replicates a project from one node to another",
     { defaultCommandTimeout: 8000 },
     () => {
