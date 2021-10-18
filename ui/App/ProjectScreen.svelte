@@ -29,7 +29,6 @@
   import { Button, Icon, ThreeDotsMenu, format } from "ui/DesignSystem";
 
   import ScreenLayout from "ui/App/ScreenLayout.svelte";
-  import Header from "ui/App/ScreenLayout/Header.svelte";
 
   import ManagePeersModal from "./ProjectScreen/ManagePeersModal.svelte";
   import PeerSelector from "ui/App/SharedComponents/PeerSelector.svelte";
@@ -105,10 +104,9 @@
 </script>
 
 <ScreenLayout dataCy="project-screen">
-  {#if $store.status === remote.Status.Success}
-    <Header>
+  <div slot="header" style="display: flex">
+    {#if $store.status === remote.Status.Success}
       <ProjectHeader
-        slot="left"
         urn={$store.data.project.urn}
         name={$store.data.project.metadata.name}
         description={$store.data.project.metadata.description}
@@ -123,7 +121,8 @@
             },
           })} />
 
-      <div slot="right" style="display: flex;">
+      <div style="width: 1.5rem; margin-left: auto" />
+      <div style="display: flex; align-self: center">
         <div style="display: flex;" class="button-transition">
           <PeerSelector
             peers={$store.data.peerSelection}
@@ -143,7 +142,9 @@
         </div>
         <ThreeDotsMenu menuItems={menuItems($store.data.project)} />
       </div>
-    </Header>
+    {/if}
+  </div>
+  {#if $store.status === remote.Status.Success}
     <Source
       {activeView}
       project={$store.data.project}

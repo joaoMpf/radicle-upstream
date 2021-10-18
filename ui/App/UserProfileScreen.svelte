@@ -18,7 +18,6 @@
   import ProjectCardSquare from "ui/App/ProfileScreen/ProjectCardSquare.svelte";
   import ScreenLayout from "ui/App/ScreenLayout.svelte";
   import Error from "ui/App/ProfileScreen/Error.svelte";
-  import Header from "ui/App/ScreenLayout/Header.svelte";
   import EmptyState from "ui/App/SharedComponents/EmptyState.svelte";
 
   import UserProfileHeader from "./UserProfileScreen/UserProfileHeader.svelte";
@@ -62,7 +61,7 @@
     max-width: var(--content-max-width);
     min-width: var(--content-min-width);
     margin: 0 auto;
-    padding: 2rem var(--content-padding);
+    padding: var(--content-padding);
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
@@ -70,15 +69,16 @@
 </style>
 
 <ScreenLayout dataCy="user-profile-screen">
-  {#if $userStore.status === remote.Status.Success}
-    <Header>
+  <div slot="header">
+    {#if $userStore.status === remote.Status.Success}
       <UserProfileHeader
-        slot="left"
         identityMetadata={$userStore.data.metadata}
         deviceIds={$userStore.data.peerIds}
         {urn} />
-    </Header>
+    {/if}
+  </div>
 
+  {#if $userStore.status === remote.Status.Success}
     {#if $projectsStore.status === remote.Status.Success}
       {#if $projectsStore.data.length === 0}
         <EmptyState text="This peer doesn't have any projects." />
