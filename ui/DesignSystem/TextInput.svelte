@@ -16,7 +16,6 @@
 
   export let autofocus: boolean = false;
   export let disabled: boolean = false;
-  export let showLeftItem: boolean = false;
   export let showSuccessCheck: boolean = false;
   export let concealed: boolean = false;
 
@@ -48,8 +47,6 @@
   $: if (inputElement) {
     inputElement.type = concealed ? "password" : "text";
   }
-
-  $: showHint = hint && value && value.length === 0;
 </script>
 
 <style>
@@ -92,10 +89,6 @@
     color: var(--color-foreground-level-5);
   }
 
-  input.left-item {
-    padding-left: 2.5rem;
-  }
-
   .suffix {
     color: var(--color-foreground-level-5);
   }
@@ -136,13 +129,6 @@
     text-align: left;
   }
 
-  .left-item-wrapper {
-    left: 0px;
-    padding-left: 0.5rem;
-    position: absolute;
-    height: 1.5rem;
-  }
-
   .hint {
     justify-content: flex-start;
     position: absolute;
@@ -156,7 +142,6 @@
       style={inputStyle}
       class:invalid={validation && validation.status === Status.Error}
       class:padding={validation && validation.status !== Status.NotStarted}
-      class:left-item={showLeftItem}
       class:concealed
       data-cy={dataCy}
       {placeholder}
@@ -170,15 +155,7 @@
       on:keypress />
   </div>
 
-  {#if showLeftItem}
-    <div
-      class="left-item-wrapper"
-      style={`top: calc((${inputHeight}px - 24px)/2)`}>
-      <slot name="left" />
-    </div>
-  {/if}
-
-  {#if showHint && !validation}
+  {#if hint && (validation === undefined || (validation && validation.status === Status.Success))}
     <div class="hint" style={`top: calc((${inputHeight}px - 28px)/2)`}>
       <KeyHint>{hint}</KeyHint>
     </div>
@@ -211,10 +188,6 @@
         position: absolute; top: calc(({inputHeight}px - 24px)/2); right: 10px;" />
       <div class="validation-row">
         <p>{validation.message}</p>
-      </div>
-    {:else if showHint}
-      <div class="hint" style={`top: calc((${inputHeight}px - 28px)/2)`}>
-        <KeyHint>{hint}</KeyHint>
       </div>
     {/if}
   {/if}

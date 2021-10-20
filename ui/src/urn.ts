@@ -7,24 +7,11 @@
 import * as multibase from "multibase";
 
 import * as error from "ui/src/error";
-import * as validation from "ui/src/validation";
 
 // FIXME(xla): Improve type safety of it, this is a placeholder to avoid using strings everywhere.
 export type Urn = string;
 
-// URN validation.
-const VALID_URN_MATCH = /^rad:git:[1-9A-HJ-NP-Za-km-z]{37}/;
 const GET_URN_ID = /^rad:git:([1-9A-HJ-NP-Za-km-z]+)(?:\/.*)?/;
-
-const urnConstraints = {
-  format: {
-    pattern: VALID_URN_MATCH,
-    message: `Not a valid Radicle ID`,
-  },
-};
-
-export const urnValidationStore = (): validation.ValidationStore =>
-  validation.createValidationStore(urnConstraints);
 
 // Takes a Radicle URN and returns its payload as a binary encoded SHA1
 export function urnToSha1(urn: string): Uint8Array {
