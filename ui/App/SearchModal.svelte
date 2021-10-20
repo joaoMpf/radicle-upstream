@@ -26,7 +26,7 @@
     TextInput,
   } from "ui/DesignSystem";
 
-  import ProjectStats from "ui/App/ProfileScreen/ProjectStats.svelte";
+  import ProjectStats from "ui/App/SharedComponents/ProjectStats.svelte";
 
   export let inputValue: string = "";
 
