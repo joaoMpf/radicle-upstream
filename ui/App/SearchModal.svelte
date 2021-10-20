@@ -17,7 +17,7 @@
   import * as proxy from "ui/src/proxy";
   import * as remote from "ui/src/remote";
   import * as router from "ui/src/router";
-  import * as validation from "ui/src/validation";
+  import * as urn from "ui/src/urn";
 
   import {
     CopyableIdentifier,
@@ -30,17 +30,8 @@
 
   export let inputValue: string = "";
 
-  const VALID_URN_MATCH = /^rad:git:[1-9A-HJ-NP-Za-km-z]{37}/;
-  const urnConstraints = {
-    format: {
-      pattern: VALID_URN_MATCH,
-      message: `Not a valid Radicle ID`,
-    },
-  };
-
   const projectRequestStore = remote.createStore<proxyProject.Request>();
   const projectSearchStore = remote.createStore<proxyProject.Project>();
-  const urnValidation = validation.createValidationStore(urnConstraints);
 
   function navigateToProject(project: project.Project) {
     reset();
@@ -96,29 +87,32 @@
   }
 
   function follow() {
-    if ($urnValidation.status === validation.ValidationStatus.Success) {
+    if (validationState === "valid") {
       requestProject(sanitizedInputValue);
     }
   }
+
+  let validationState: "initial" | "valid" | "invalid" = "initial";
 
   $: sanitizedInputValue = inputValue.trim();
 
   // Validate input entered, at the moment valid RadUrns are the only
   // acceptable input.
   $: if (sanitizedInputValue && sanitizedInputValue.length > 0) {
-    urnValidation.validate(sanitizedInputValue);
+    const result = urn.extractSha1FromUrn(sanitizedInputValue);
+    validationState = result.isUrnValid ? "valid" : "invalid";
   } else {
-    urnValidation.reset();
+    validationState = "initial";
   }
 
   // To support quick pasting, request the urn once valid to get tracking
   // information.
-  $: if ($urnValidation.status === validation.ValidationStatus.Success) {
+  $: if (validationState === "valid") {
     searchProject(sanitizedInputValue);
   }
 
   // Reset searches if the input became invalid.
-  $: if ($urnValidation.status !== validation.ValidationStatus.Success) {
+  $: if (validationState !== "valid") {
     reset();
   }
 
@@ -190,9 +184,7 @@
       bind:value={inputValue}
       on:keydown={onKeydown}
       placeholder="Enter a project’s Radicle ID here…"
-      hint={$urnValidation.status === validation.ValidationStatus.Success
-        ? "↵"
-        : ""} />
+      hint={validationState === "valid" ? "↵" : ""} />
   </div>
 
   {#if $projectSearchStore.status === remote.Status.Success}
@@ -234,7 +226,7 @@
         </p>
       </div>
     </div>
-  {:else if $urnValidation.status === validation.ValidationStatus.Error}
+  {:else if validationState === "invalid"}
     <div class="result" out:fade|local={{ duration: 100 }}>
       <div style="padding: 1.5rem;">
         <p>That's not a valid Radicle ID.</p>
