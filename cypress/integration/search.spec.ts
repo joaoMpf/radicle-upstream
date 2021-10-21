@@ -59,7 +59,7 @@ context("search", () => {
 
         commands
           .pick("search-modal")
-          .should("contain", "Not a valid Radicle ID");
+          .should("contain", "That's not a valid Radicle ID.");
 
         cy.get("@projectRequest").should("not.have.been.called");
       });
