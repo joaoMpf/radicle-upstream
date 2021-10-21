@@ -11,6 +11,8 @@
 
   import { fade } from "svelte/transition";
 
+  import { VALID_PEER_MATCH } from "ui/src/screen/project";
+
   import * as error from "ui/src/error";
   import * as modal from "ui/src/modal";
   import * as notification from "ui/src/notification";
@@ -87,12 +89,15 @@
   }
 
   function follow() {
-    if (validationState === "valid") {
+    if (validationState.type === "valid") {
       requestProject(sanitizedInputValue);
     }
   }
 
-  let validationState: "initial" | "valid" | "invalid" = "initial";
+  let validationState:
+    | { type: "initial" }
+    | { type: "valid" }
+    | { type: "invalid"; message: string } = { type: "initial" };
 
   $: sanitizedInputValue = inputValue.trim();
 
@@ -100,19 +105,33 @@
   // acceptable input.
   $: if (sanitizedInputValue && sanitizedInputValue.length > 0) {
     const result = urn.extractSha1FromUrn(sanitizedInputValue);
-    validationState = result.isUrnValid ? "valid" : "invalid";
+
+    if (result.isUrnValid) {
+      validationState = { type: "valid" };
+    } else if (VALID_PEER_MATCH.test(sanitizedInputValue)) {
+      validationState = {
+        type: "invalid",
+        message:
+          "You’ve entered a Device ID instead of a Project ID. To collaborate with someone, enter their Device ID as a remote directly in a project.",
+      };
+    } else {
+      validationState = {
+        type: "invalid",
+        message: "That’s not a valid Radicle ID.",
+      };
+    }
   } else {
-    validationState = "initial";
+    validationState = { type: "initial" };
   }
 
   // To support quick pasting, request the urn once valid to get tracking
   // information.
-  $: if (validationState === "valid") {
+  $: if (validationState.type === "valid") {
     searchProject(sanitizedInputValue);
   }
 
   // Reset searches if the input became invalid.
-  $: if (validationState !== "valid") {
+  $: if (validationState.type !== "valid") {
     reset();
   }
 
@@ -184,7 +203,7 @@
       bind:value={inputValue}
       on:keydown={onKeydown}
       placeholder="Enter a project’s Radicle ID here…"
-      hint={validationState === "valid" ? "↵" : ""} />
+      hint={validationState.type === "valid" ? "↵" : ""} />
   </div>
 
   {#if $projectSearchStore.status === remote.Status.Success}
@@ -226,10 +245,10 @@
         </p>
       </div>
     </div>
-  {:else if validationState === "invalid"}
+  {:else if validationState.type === "invalid"}
     <div class="result" out:fade|local={{ duration: 100 }}>
       <div style="padding: 1.5rem;">
-        <p>That's not a valid Radicle ID.</p>
+        <p>{validationState.message}</p>
       </div>
     </div>
   {/if}
