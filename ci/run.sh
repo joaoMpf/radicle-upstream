@@ -116,8 +116,8 @@ time FORCE_COLOR=1 ELECTRON_ENABLE_LOGGING=1 yarn test |
   "
 log-group-end
 
-if [[ "${BUILDKITE_BRANCH:-}" == "master" || "${BUILDKITE_BRANCH:-}" == release-candidate/v* || -n "${BUILDKITE_TAG:-}" ]]; then
-  if [[ "${BUILDKITE_AGENT_META_DATA_PLATFORM:-}" == "macos" ]]; then
+if [[ "${GITHUB_REF:-}" == "refs/heads/master" || "${GITHUB_REF:-}" == refs/heads/thomas/* ]]; then
+  if [[ "${RUNNER_OS:-}" == "macOS" ]]; then
     log-group-start "Packaging, notarizing and uploading app binaries"
     (
       export NOTARIZE=true
