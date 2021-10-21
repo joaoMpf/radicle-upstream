@@ -33,7 +33,6 @@
   };
 
   let inputElement: HTMLInputElement | undefined = undefined;
-  let inputHeight: number;
 
   // Can't use normal `autofocus` attribute on the `inputElement`: "Autofocus
   // processing was blocked because a document's URL has a fragment".
@@ -137,7 +136,7 @@
 </style>
 
 <div {style} class="wrapper">
-  <div bind:clientHeight={inputHeight} on:click>
+  <div on:click>
     <input
       style={inputStyle}
       class:invalid={validation && validation.status === Status.Error}
@@ -156,14 +155,14 @@
   </div>
 
   {#if hint && (validation === undefined || (validation && validation.status === Status.Success))}
-    <div class="hint" style={`top: calc((${inputHeight}px - 28px)/2)`}>
+    <div class="hint" style={`top: 6px`}>
       <KeyHint>{hint}</KeyHint>
     </div>
   {/if}
 
   {#if suffix}
     <p
-      style="position: absolute; top: calc(({inputHeight}px - 24px)/2); right: {validation &&
+      style="position: absolute; top: 8px; right: {validation &&
       validation.status !== Status.NotStarted
         ? '38px'
         : '10px'};"
@@ -180,12 +179,12 @@
     {:else if validation && validation.status === Status.Success && showSuccessCheck}
       <Icon.CheckCircle
         style="fill: var(--color-positive); justify-content: flex-start;
-        position: absolute; top: calc(({inputHeight}px - 24px)/2); right: 10px;" />
+        position: absolute; top: 8px; right: 10px;" />
     {:else if validation && validation.status === Status.Error}
       <Icon.ExclamationCircle
         dataCy="validation-error-icon"
         style="fill: var(--color-negative); justify-content: flex-start;
-        position: absolute; top: calc(({inputHeight}px - 24px)/2); right: 10px;" />
+        position: absolute; top: 8px; right: 10px;" />
       <div class="validation-row">
         <p>{validation.message}</p>
       </div>
