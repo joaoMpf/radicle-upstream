@@ -112,7 +112,7 @@
       validationState = {
         type: "invalid",
         message:
-          "You’ve entered a Device ID instead of a Project ID. To collaborate with someone, enter their Device ID as a remote directly in a project.",
+          "You’ve entered a Device ID instead of a Project ID. To collaborate with someone, add their Device ID as a remote directly to a project.",
       };
     } else {
       validationState = {
