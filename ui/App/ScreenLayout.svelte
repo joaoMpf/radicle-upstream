@@ -43,7 +43,7 @@
 
   <div class="container">
     {#if $$slots.header}
-      <div class="header">
+      <div class="header" data-cy="header">
         <div class="header-content">
           <slot name="header" />
         </div>
