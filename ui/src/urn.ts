@@ -10,14 +10,14 @@ import * as error from "ui/src/error";
 // FIXME(xla): Improve type safety of it, this is a placeholder to avoid using strings everywhere.
 export type Urn = string;
 
-const URN_RE = /^rad:git:([1-9A-HJ-NP-Za-km-z]+)(?:\/.*)?/;
+const VALID_URN_MATCH = /^rad:git:([1-9A-HJ-NP-Za-km-z]+)(?:\/.*)?/;
 
 export function extractSha1FromUrn(
   urn: string
 ):
   | { isUrnValid: true; sha1: Uint8Array }
   | { isUrnValid: false; error: string } {
-  const match = urn.match(URN_RE) || [];
+  const match = urn.match(VALID_URN_MATCH) || [];
   const id = match[1];
 
   if (!id) {
