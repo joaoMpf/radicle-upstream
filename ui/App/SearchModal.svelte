@@ -156,6 +156,7 @@
     position: absolute;
     width: 30rem;
     color: var(--color-foreground-level-6);
+    padding: 1.5rem;
   }
 
   .header {
@@ -189,48 +190,42 @@
 
   {#if $projectSearchStore.status === remote.Status.Success}
     <div class="result" out:fade|local={{ duration: 100 }}>
-      <div style="padding: 1.5rem;">
-        <h3
-          class="header"
-          data-cy="project-name"
-          on:click={navigateToProject.bind(null, $projectSearchStore.data)}>
-          <span class="project-name"
-            >{$projectSearchStore.data.metadata.name}</span>
-          <FollowToggle disabled following={true} />
-        </h3>
+      <h3
+        class="header"
+        data-cy="project-name"
+        on:click={navigateToProject.bind(null, $projectSearchStore.data)}>
+        <span class="project-name"
+          >{$projectSearchStore.data.metadata.name}</span>
+        <FollowToggle disabled following={true} />
+      </h3>
 
-        <p style="margin-bottom: 1rem;">
-          {$projectSearchStore.data.metadata.description}
-        </p>
+      <p style="margin-bottom: 1rem;">
+        {$projectSearchStore.data.metadata.description}
+      </p>
 
-        <ProjectStats
-          branches={$projectSearchStore.data.stats.branches}
-          commits={$projectSearchStore.data.stats.commits}
-          contributors={$projectSearchStore.data.stats.contributors} />
-      </div>
+      <ProjectStats
+        branches={$projectSearchStore.data.stats.branches}
+        commits={$projectSearchStore.data.stats.commits}
+        contributors={$projectSearchStore.data.stats.contributors} />
     </div>
   {:else if $projectSearchStore.status === remote.Status.Error}
     <div class="result" out:fade|local={{ duration: 100 }}>
-      <div style="padding: 1.5rem;">
-        <h3 class="header">
-          <CopyableIdentifier
-            value={sanitizedSearchQuery}
-            kind="radicleId"
-            showIcon={false} />
-          <FollowToggle on:follow={follow} style="margin-left: 1rem;" />
-        </h3>
+      <h3 class="header">
+        <CopyableIdentifier
+          value={sanitizedSearchQuery}
+          kind="radicleId"
+          showIcon={false} />
+        <FollowToggle on:follow={follow} style="margin-left: 1rem;" />
+      </h3>
 
-        <p>
-          You’re not following this project yet, so there’s nothing to show
-          here. Follow it and you’ll be notified as soon as it’s available.
-        </p>
-      </div>
+      <p>
+        You’re not following this project yet, so there’s nothing to show here.
+        Follow it and you’ll be notified as soon as it’s available.
+      </p>
     </div>
   {:else if validationState.type === "invalid"}
     <div class="result" out:fade|local={{ duration: 100 }}>
-      <div style="padding: 1.5rem;">
-        <p>{validationState.message}</p>
-      </div>
+      <p>{validationState.message}</p>
     </div>
   {/if}
 </div>
