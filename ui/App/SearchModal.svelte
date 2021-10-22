@@ -68,29 +68,12 @@
     projectSearchStore.reset();
   }
 
-  async function requestProject(urn: string): Promise<void> {
-    projectRequestStore.loading();
-    try {
-      const projectRequest = await proxy.client.project.requestSubmit(urn);
-      projectRequestStore.success(projectRequest);
-    } catch (err: unknown) {
-      projectRequestStore.error(error.fromUnknown(err));
-    }
-  }
-
-  async function searchProject(urn: string): Promise<void> {
-    projectSearchStore.loading();
-    try {
-      const project = await proxy.client.project.get(urn);
-      projectSearchStore.success(project);
-    } catch (err: unknown) {
-      projectSearchStore.error(error.fromUnknown(err));
-    }
-  }
-
   function follow() {
     if (validationState.type === "valid") {
-      requestProject(sanitizedSearchQuery);
+      remote.fetch(
+        projectRequestStore,
+        proxy.client.project.requestSubmit(sanitizedSearchQuery)
+      );
     }
   }
 
@@ -109,7 +92,10 @@
     if (result.isUrnValid) {
       validationState = { type: "valid" };
       // Load and show project metadata.
-      searchProject(sanitizedSearchQuery);
+      remote.fetch(
+        projectSearchStore,
+        proxy.client.project.get(sanitizedSearchQuery)
+      );
     } else if (VALID_PEER_MATCH.test(sanitizedSearchQuery)) {
       validationState = {
         type: "invalid",
