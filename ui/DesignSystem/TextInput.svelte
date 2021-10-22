@@ -16,6 +16,7 @@
 
   export let autofocus: boolean = false;
   export let disabled: boolean = false;
+  export let readonly: boolean = false;
   export let showSuccessCheck: boolean = false;
   export let concealed: boolean = false;
 
@@ -80,6 +81,10 @@
     background-color: var(--color-foreground-level-1);
   }
 
+  input[readonly]:hover {
+    cursor: pointer;
+  }
+
   .right-container {
     height: 2.5rem;
     position: absolute;
@@ -128,24 +133,24 @@
 </style>
 
 <div {style} class="wrapper">
-  <div on:click>
-    <input
-      style={`${inputStyle}; padding-right: ${
-        rightContainerWidth ? `${rightContainerWidth}px` : "auto"
-      };`}
-      class:invalid={validation && validation.status === Status.Error}
-      class:concealed
-      data-cy={dataCy}
-      {placeholder}
-      {disabled}
-      spellcheck={false}
-      bind:value
-      bind:this={inputElement}
-      on:change
-      on:input
-      on:keydown
-      on:keypress />
-  </div>
+  <input
+    style={`${inputStyle}; padding-right: ${
+      rightContainerWidth ? `${rightContainerWidth}px` : "auto"
+    };`}
+    class:invalid={validation && validation.status === Status.Error}
+    class:concealed
+    data-cy={dataCy}
+    {placeholder}
+    {disabled}
+    {readonly}
+    spellcheck={false}
+    bind:value
+    bind:this={inputElement}
+    on:change
+    on:click
+    on:input
+    on:keydown
+    on:keypress />
 
   <div class="right-container" bind:clientWidth={rightContainerWidth}>
     {#if hint && (validation === undefined || validation.status === Status.Success)}

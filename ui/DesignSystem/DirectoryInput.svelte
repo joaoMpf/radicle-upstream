@@ -42,7 +42,7 @@
     {placeholder}
     {validation}
     value={path}
-    disabled
+    readonly
     style="margin-right: 0.5rem; flex: 1" />
 
   <Button dataCy="choose-path-button" on:click={openFileDialog}>Choose</Button>
