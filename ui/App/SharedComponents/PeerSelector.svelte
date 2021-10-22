@@ -8,12 +8,13 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  import { PeerRole, PeerType } from "ui/src/project";
+  import { PeerRole } from "ui/src/project";
   import type { User } from "ui/src/project";
 
   import { Icon, Overlay, Tooltip } from "ui/DesignSystem";
 
   import UserIdentity from "ui/App/SharedComponents/UserIdentity.svelte";
+  import UserBadge from "ui/App/SharedComponents/UserBadge.svelte";
 
   export let expanded: boolean = false;
   // If `true`,  this component is used in a stand-alone context. This means it
@@ -61,6 +62,7 @@
     justify-content: space-between;
     background-color: var(--color-foreground-level-1);
     user-select: none;
+    gap: 0.5rem;
   }
 
   .peer-selector:hover {
@@ -69,10 +71,6 @@
 
   .peer-selector[hidden] {
     visibility: hidden;
-  }
-
-  .selector-expand {
-    margin-left: 0.5rem;
   }
 
   .peer-dropdown-container {
@@ -105,10 +103,10 @@
     align-items: center;
     background-color: var(--color-background);
     color: var(--color-foreground-level-3);
+    gap: 0.5rem;
     cursor: not-allowed;
     display: flex;
     height: 2.5rem;
-    justify-content: space-between;
     padding: 0 0.5em;
   }
 
@@ -144,16 +142,9 @@
     <UserIdentity
       boldHandle={true}
       urn={selected.identity.urn}
-      handle={selected.identity.metadata.handle}
-      badge={selected.role === PeerRole.Maintainer
-        ? "maintainer"
-        : selected.type === PeerType.Local
-        ? "you"
-        : ""} />
-    <div class="selector-expand">
-      <Icon.ChevronUpDown
-        style="vertical-align: bottom; fill: var(--color-foreground-level-4)" />
-    </div>
+      handle={selected.identity.metadata.handle} />
+    <UserBadge user={selected} />
+    <Icon.ChevronUpDown style="fill: var(--color-foreground-level-4);" />
   </div>
   <div class="peer-dropdown-container" data-cy="peer-dropdown-container">
     <div
@@ -176,20 +167,16 @@
                 disableHovercard={true}
                 boldHandle={true}
                 urn={peer.identity.urn}
-                badge={peer.type === PeerType.Local ? "you" : ""}
                 handle={peer.identity.metadata.handle} />
+              <UserBadge user={peer} />
             </Tooltip>
           {:else}
             <UserIdentity
               disableHovercard={true}
               boldHandle={true}
               urn={peer.identity.urn}
-              badge={peer.role === PeerRole.Maintainer
-                ? "maintainer"
-                : peer.type === PeerType.Local
-                ? "you"
-                : ""}
               handle={peer.identity.metadata.handle} />
+            <UserBadge user={peer} />
           {/if}
         </div>
       {/each}

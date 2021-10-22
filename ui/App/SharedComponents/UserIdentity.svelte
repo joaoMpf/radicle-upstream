@@ -14,16 +14,10 @@
   import * as router from "ui/src/router";
   import * as session from "ui/src/session";
 
-  import {
-    Avatar,
-    Badge,
-    CopyableIdentifier,
-    Hovercard,
-  } from "ui/DesignSystem";
+  import { Avatar, CopyableIdentifier, Hovercard } from "ui/DesignSystem";
 
   export let urn: string;
   export let handle: string | undefined = undefined;
-  export let badge: string | undefined = undefined;
   export let disableHovercard: boolean = false;
   export let modalStyle: string = "top: -2rem; left: -17rem;";
   export let boldHandle: boolean = false;
@@ -116,7 +110,6 @@
           {handle}
         </div>
       {/if}
-      <Badge text={badge} style="margin-left: 0.5rem;" />
     </div>
   </svelte:fragment>
 
