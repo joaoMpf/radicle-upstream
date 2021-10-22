@@ -86,7 +86,7 @@
 
   // Validate input entered, at the moment valid RadUrns are the only
   // acceptable input.
-  $: if (sanitizedSearchQuery && sanitizedSearchQuery.length > 0) {
+  $: if (sanitizedSearchQuery.length > 0) {
     const result = urn.extractSha1FromUrn(sanitizedSearchQuery);
 
     if (result.isUrnValid) {
