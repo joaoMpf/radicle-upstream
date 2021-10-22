@@ -6,13 +6,14 @@
  LICENSE file.
 -->
 <script lang="ts">
+  import type { TextInputValidation } from "ui/DesignSystem/TextInput.svelte";
+
   import * as configureEns from "ui/src/org/configureEns";
   import * as ensResolver from "ui/src/org/ensResolver";
   import * as error from "ui/src/error";
   import * as modal from "ui/src/modal";
   import * as notification from "ui/src/notification";
   import * as transaction from "ui/src/transaction";
-  import * as validation from "ui/src/validation";
 
   import { Button, TextInput, Tooltip } from "ui/DesignSystem";
   import Modal from "ui/App/ModalLayout/Modal.svelte";
@@ -30,8 +31,8 @@
 
   let setRecordsInProgress = false;
 
-  let orgAddressValidationStatus: validation.ValidationState = {
-    status: validation.ValidationStatus.NotStarted,
+  let orgAddressValidationStatus: TextInputValidation = {
+    state: "unvalidated",
   };
 
   if (
@@ -39,7 +40,7 @@
     registration.address.toLowerCase() !== orgAddress.toLowerCase()
   ) {
     orgAddressValidationStatus = {
-      status: validation.ValidationStatus.Error,
+      state: "invalid",
       message: `This name already points to your org with the address ${registration.address}. If you change this here, it will overwrite the existing metadata associated with this ENS name.`,
     };
   }

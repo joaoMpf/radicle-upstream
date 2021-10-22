@@ -26,7 +26,6 @@
     repositoryPathValidationStore,
   } from "ui/src/project";
   import * as proxy from "ui/src/proxy";
-  import { ValidationStatus } from "ui/src/validation";
   import * as screen from "ui/src/screen";
 
   import {
@@ -145,18 +144,16 @@
   $: isExisting && (name = "");
 
   // The presence check is outside the validations since we don't want to show the validation error message for it.
-  $: validName =
-    name.length > 0 && $nameValidation.status === ValidationStatus.Success;
+  $: validName = name.length > 0 && $nameValidation.state === "valid";
 
   $: validDescription =
     description.length === 0 ||
-    (description.length > 0 &&
-      $descriptionValidation.status === ValidationStatus.Success);
+    (description.length > 0 && $descriptionValidation.state === "valid");
 
   $: disableSubmit =
     !validName ||
     !validDescription ||
-    $pathValidation.status !== ValidationStatus.Success ||
+    $pathValidation.state !== "valid" ||
     loading;
 
   $: localStateStore = $localState;

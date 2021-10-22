@@ -6,12 +6,10 @@
  LICENSE file.
 -->
 <script lang="ts">
-  import type { ValidationState } from "ui/src/validation";
+  import type { TextInputValidation } from "ui/DesignSystem/TextInput.svelte";
 
   import { createEventDispatcher } from "svelte";
   import validatejs from "validate.js";
-
-  import { ValidationStatus, getValidationState } from "ui/src/validation";
 
   import { Button, Icon, TextInput } from "ui/DesignSystem";
 
@@ -54,11 +52,25 @@
     },
   };
 
-  let passphraseValidation: ValidationState = {
-    status: ValidationStatus.NotStarted,
+  let passphraseValidation: TextInputValidation = {
+    state: "unvalidated",
   };
-  let repeatedPassphraseValidation: ValidationState = {
-    status: ValidationStatus.NotStarted,
+  let repeatedPassphraseValidation: TextInputValidation = {
+    state: "unvalidated",
+  };
+
+  const getValidationState = (
+    entity: string,
+    validationErrors: { [key: string]: string[] }
+  ): TextInputValidation => {
+    if (validationErrors && validationErrors[entity]) {
+      return {
+        state: "invalid",
+        message: validationErrors[entity][0],
+      };
+    }
+
+    return { state: "valid" };
   };
 
   // The `dummy` argument allows us to encode reactive dependencies for

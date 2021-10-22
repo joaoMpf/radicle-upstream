@@ -6,10 +6,10 @@
  LICENSE file.
 -->
 <script lang="ts">
+  import type { TextInputValidation } from "./TextInput.svelte";
+
   import { createEventDispatcher } from "svelte";
   import { getDirectoryPath } from "ui/src/ipc";
-
-  import type { ValidationState } from "ui/src/validation";
 
   import Button from "./Button.svelte";
   import TextInput from "./TextInput.svelte";
@@ -17,7 +17,7 @@
   export let placeholder: string | undefined = undefined;
   export let style: string | undefined = undefined;
   export let path = "";
-  export let validation: ValidationState | undefined = undefined;
+  export let validation: TextInputValidation | undefined = undefined;
 
   const dispatch = createEventDispatcher();
 

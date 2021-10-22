@@ -11,7 +11,7 @@
   import { status } from "ui/src/localPeer";
   import * as proxy from "ui/src/proxy";
   import { indicatorState } from "ui/src/network";
-  import { createValidationStore, ValidationStatus } from "ui/src/validation";
+  import { createValidationStore } from "ui/src/validation";
   import { VALID_SEED_MATCH } from "ui/src/session";
 
   import { Button, CopyableIdentifier, Icon, TextInput } from "ui/DesignSystem";
@@ -52,7 +52,7 @@
     // We have to wait a tick so that the asynchronous validations can
     // run and update the validation status
     await Promise.resolve();
-    if (svelteStore.get(seedValidation).status === ValidationStatus.Success) {
+    if (svelteStore.get(seedValidation).state === "valid") {
       await updateSeeds(seeds => [...seeds, seedInputValue]);
       seedInputValue = "";
     }

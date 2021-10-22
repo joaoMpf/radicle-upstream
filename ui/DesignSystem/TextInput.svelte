@@ -5,11 +5,15 @@
  with Radicle Linking Exception. For full terms see the included
  LICENSE file.
 -->
+<script lang="ts" context="module">
+  export type TextInputValidation =
+    | { state: "unvalidated" }
+    | { state: "pending" }
+    | { state: "valid" }
+    | { state: "invalid"; message: string };
+</script>
+
 <script lang="ts">
-  import type { ValidationState } from "ui/src/validation";
-
-  import { ValidationStatus as Status } from "ui/src/validation";
-
   import Icon from "./Icon";
   import KeyHint from "./KeyHint.svelte";
   import Spinner from "./Spinner.svelte";
@@ -21,13 +25,16 @@
   export let showSuccessCheck: boolean = false;
 
   export let dataCy: string | undefined = undefined;
-  export let hint: string | undefined = undefined;
   export let inputStyle: string | undefined = undefined;
-  export let placeholder: string | undefined = undefined;
   export let style: string | undefined = undefined;
-  export let suffix: string | undefined = undefined;
-  export let validation: ValidationState | undefined = undefined;
+
   export let value: string | undefined = undefined;
+  export let placeholder: string | undefined = undefined;
+
+  export let hint: string | undefined = undefined;
+  export let suffix: string | undefined = undefined;
+
+  export let validation: TextInputValidation = { state: "unvalidated" };
 
   export const focus = (): void => {
     inputElement && inputElement.focus();
@@ -121,7 +128,7 @@
     background: var(--color-foreground-level-1);
   }
 
-  .validation-row {
+  .validation-message {
     align-items: center;
     color: var(--color-negative);
     display: flex;
@@ -136,7 +143,7 @@
     style={`${inputStyle}; padding-right: ${
       rightContainerWidth ? `${rightContainerWidth}px` : "auto"
     };`}
-    class:invalid={validation && validation.status === Status.Error}
+    class:invalid={validation.state === "invalid"}
     class:concealed
     data-cy={dataCy}
     {placeholder}
@@ -152,7 +159,7 @@
     on:keypress />
 
   <div class="right-container" bind:clientWidth={rightContainerWidth}>
-    {#if hint && (validation === undefined || validation.status === Status.Success)}
+    {#if hint && (validation.state === "unvalidated" || validation.state === "valid")}
       <KeyHint style="margin: 0 0.5rem;">{hint}</KeyHint>
     {/if}
 
@@ -162,20 +169,20 @@
       </span>
     {/if}
 
-    {#if validation && validation.status === Status.Loading}
+    {#if validation.state === "pending"}
       <Spinner style="margin: 0 0.5rem;" />
-    {:else if validation && validation.status === Status.Success && showSuccessCheck}
+    {:else if showSuccessCheck && validation.state === "valid"}
       <Icon.CheckCircle
         style="fill: var(--color-positive); margin: 0 0.5rem;" />
-    {:else if validation && validation.status === Status.Error}
+    {:else if validation.state === "invalid"}
       <Icon.ExclamationCircle
         dataCy="validation-error-icon"
         style="fill: var(--color-negative); margin: 0 0.5rem;" />
     {/if}
   </div>
 
-  {#if validation && validation.status === Status.Error}
-    <div class="validation-row">
+  {#if validation.state === "invalid"}
+    <div class="validation-message">
       {validation.message}
     </div>
   {/if}

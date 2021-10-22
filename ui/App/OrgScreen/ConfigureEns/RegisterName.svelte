@@ -14,6 +14,7 @@
 
 <script lang="ts">
   import type * as ethers from "ethers";
+  import type { TextInputValidation } from "ui/DesignSystem/TextInput.svelte";
 
   import { sleep } from "ui/src/sleep";
   import { unreachable } from "ui/src/unreachable";
@@ -26,7 +27,6 @@
   import * as notification from "ui/src/notification";
   import * as svelteStore from "ui/src/svelteStore";
   import * as transaction from "ui/src/transaction";
-  import * as validation from "ui/src/validation";
   import * as wallet from "ui/src/wallet";
 
   import { Button, TextInput } from "ui/DesignSystem";
@@ -52,8 +52,8 @@
   let nameInputValue: string = currentName || "";
   let commitInProgress: boolean = false;
   let validatedName: string;
-  let validationState: validation.ValidationState = {
-    status: validation.ValidationStatus.NotStarted,
+  let validationState: TextInputValidation = {
+    state: "unvalidated",
   };
   let registration: ensResolver.Registration | undefined;
   let userInputStarted: boolean = nameInputValue !== "";
@@ -66,7 +66,7 @@
     name: string | undefined
   ): Promise<void> {
     validationState = {
-      status: validation.ValidationStatus.Loading,
+      state: "pending",
     };
 
     const validationResult = await validateFormExecutor.run(
@@ -75,8 +75,8 @@
           return {
             validatedName: "",
             validationState: {
-              status: validation.ValidationStatus.NotStarted,
-            } as validation.ValidationState,
+              state: "unvalidated",
+            } as TextInputValidation,
             registration: undefined,
           };
         }
@@ -99,7 +99,7 @@
 
   async function runAsyncValidations(name: string): Promise<{
     validatedName: string;
-    validationState: validation.ValidationState;
+    validationState: TextInputValidation;
     registration: ensResolver.Registration | undefined;
   }> {
     const available = await ensRegistrar.isAvailable(name);
@@ -112,7 +112,7 @@
         return {
           validatedName: name,
           validationState: {
-            status: validation.ValidationStatus.Error,
+            state: "invalid",
             message: `You don't have enough RAD in your wallet to register this name. Name registration costs ${ethereum.formatTokenAmount(
               fee
             )} RAD.`,
@@ -124,7 +124,7 @@
       return {
         validatedName: name,
         validationState: {
-          status: validation.ValidationStatus.Success,
+          state: "valid",
         },
         registration: undefined,
       };
@@ -140,7 +140,7 @@
       return {
         validatedName: name,
         validationState: {
-          status: validation.ValidationStatus.Success,
+          state: "valid",
         },
         registration,
       };
@@ -149,7 +149,7 @@
     return {
       validatedName: name,
       validationState: {
-        status: validation.ValidationStatus.Error,
+        state: "invalid",
         message: "Sorry, that name is already taken.",
       },
       registration: undefined,
@@ -297,8 +297,7 @@
         }}>Cancel</Button>
       <Button
         on:click={commitOrGoToUpdateMetadata}
-        disabled={validationState.status !==
-          validation.ValidationStatus.Success || commitInProgress}
+        disabled={validationState.state !== "valid" || commitInProgress}
         >Continue</Button>
     </svelte:fragment>
   </Modal>

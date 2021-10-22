@@ -8,7 +8,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  import { ValidationStatus } from "ui/src/validation";
   import * as onboarding from "ui/src/onboarding";
 
   import { Button, Emoji, TextInput } from "ui/DesignSystem";
@@ -22,10 +21,8 @@
 
   const validationStore = onboarding.createHandleValidationStore();
 
-  const validationPasses = () =>
-    $validationStore.status === ValidationStatus.Success;
-  const validationStarted = () =>
-    $validationStore.status !== ValidationStatus.NotStarted;
+  const validationPasses = () => $validationStore.state === "valid";
+  const validationStarted = () => $validationStore.state !== "unvalidated";
 
   $: beginValidation && validationStore.validate(handle);
   $: allowNext = (handle && validationPasses()) || !validationStarted();

@@ -14,32 +14,17 @@ export enum ValidationStatus {
   Success = "SUCCESS",
 }
 
-export type ValidationState =
-  | { status: ValidationStatus.NotStarted }
-  | { status: ValidationStatus.Loading }
-  | { status: ValidationStatus.Error; message: string }
-  | { status: ValidationStatus.Success };
+// TODO: figure out how to import this from `DesignSystem/TextInput.svelte`.
+type TextInputValidation =
+  | { state: "unvalidated" }
+  | { state: "pending" }
+  | { state: "valid" }
+  | { state: "invalid"; message: string };
 
-export interface ValidationStore extends Readable<ValidationState> {
+export interface ValidationStore extends Readable<TextInputValidation> {
   reset: () => void;
   validate: (input: string) => void;
 }
-
-// TODO(sos): While we're figuring out consistent validations, this method makes
-// it easier to derive a ValidationState from an existing validatejs response
-export const getValidationState = (
-  entity: string,
-  validationErrors: { [key: string]: string[] }
-): ValidationState => {
-  if (validationErrors && validationErrors[entity]) {
-    return {
-      status: ValidationStatus.Error,
-      message: validationErrors[entity][0],
-    };
-  }
-
-  return { status: ValidationStatus.Success };
-};
 
 interface RemoteValidation {
   promise: (input: string) => Promise<boolean>;
@@ -84,8 +69,8 @@ export const createValidationStore = (
   remoteValidations?: RemoteValidation[]
 ): ValidationStore => {
   const initialState = {
-    status: ValidationStatus.NotStarted,
-  } as ValidationState;
+    state: "unvalidated",
+  } as TextInputValidation;
   const internalStore = writable(initialState);
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { subscribe, update } = internalStore;
@@ -107,7 +92,7 @@ export const createValidationStore = (
   const runValidations = async (input: string): Promise<void> => {
     // Always start with Loading
     update(() => {
-      return { status: ValidationStatus.Loading, input: input };
+      return { state: "pending", input: input };
     });
 
     // Check for errors
@@ -121,7 +106,7 @@ export const createValidationStore = (
     if (errors) {
       update(() => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-        return { status: ValidationStatus.Error, message: errors.input[0] };
+        return { state: "invalid", message: errors.input[0] };
       });
       return;
     }
@@ -142,7 +127,7 @@ export const createValidationStore = (
                 return store;
               }
               return {
-                status: ValidationStatus.Error,
+                state: "invalid",
                 message: remoteValidation.validationMessage,
               };
             });
@@ -158,7 +143,7 @@ export const createValidationStore = (
               return store;
             }
             return {
-              status: ValidationStatus.Error,
+              state: "invalid",
               message: `Cannot validate "${input}": ${
                 (error as Error).message
               }`,
@@ -180,7 +165,7 @@ export const createValidationStore = (
       if (getInput() !== input) {
         return store;
       }
-      return { status: ValidationStatus.Success };
+      return { state: "valid" };
     });
   };
 
