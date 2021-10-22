@@ -118,14 +118,11 @@
   }
 
   .validation-row {
-    display: flex;
     align-items: center;
-
-    margin: 0.75rem 0 0 0.75rem;
-  }
-
-  .validation-row {
     color: var(--color-negative);
+    display: flex;
+    margin-top: 0.75rem;
+    margin-left: 0.75rem;
     text-align: left;
   }
 </style>
