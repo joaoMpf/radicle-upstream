@@ -151,7 +151,7 @@
   </div>
 
   <div class="right-container" bind:clientWidth={rightContainerWidth}>
-    {#if hint && (validation === undefined || (validation && validation.status === Status.Success))}
+    {#if hint && (validation === undefined || validation.status === Status.Success)}
       <KeyHint style="margin: 0 0.5rem;">{hint}</KeyHint>
     {/if}
 
