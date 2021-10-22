@@ -140,7 +140,6 @@
     align-items: center;
     background-color: var(--color-foreground-level-1);
     border-radius: 0.5rem;
-    border: 0;
     box-shadow: var(--color-shadows);
     color: var(--color-foreground-level-6);
     display: flex;
