@@ -15,10 +15,10 @@
   import Spinner from "./Spinner.svelte";
 
   export let autofocus: boolean = false;
+  export let concealed: boolean = false;
   export let disabled: boolean = false;
   export let readonly: boolean = false;
   export let showSuccessCheck: boolean = false;
-  export let concealed: boolean = false;
 
   export let dataCy: string | undefined = undefined;
   export let hint: string | undefined = undefined;
@@ -68,9 +68,9 @@
   }
 
   input[disabled] {
-    cursor: not-allowed;
-    color: var(--color-foreground-level-4);
     background-color: var(--color-foreground-level-1);
+    color: var(--color-foreground-level-4);
+    cursor: not-allowed;
   }
 
   input[disabled]::placeholder {
@@ -86,12 +86,12 @@
   }
 
   .right-container {
+    align-items: center;
+    display: flex;
     height: 2.5rem;
     position: absolute;
-    top: 0;
     right: 0;
-    display: flex;
-    align-items: center;
+    top: 0;
   }
 
   .concealed {
@@ -104,18 +104,18 @@
 
   input:focus,
   input:hover {
-    outline: none;
+    background-color: var(--color-foreground-level-1);
     border: 1px solid
       var(--focus-outline-color, var(--color-foreground-level-3));
-    background-color: var(--color-foreground-level-1);
+    outline: none;
   }
 
   input.invalid:focus,
   input.invalid {
-    outline: none;
-    border: 1px solid var(--color-negative);
-    background: var(--color-background);
     background-position: right 0.875rem top 55%;
+    background: var(--color-background);
+    border: 1px solid var(--color-negative);
+    outline: none;
   }
 
   input.invalid:focus {
@@ -126,8 +126,8 @@
     align-items: center;
     color: var(--color-negative);
     display: flex;
-    margin-top: 0.75rem;
     margin-left: 0.75rem;
+    margin-top: 0.75rem;
     text-align: left;
   }
 </style>
