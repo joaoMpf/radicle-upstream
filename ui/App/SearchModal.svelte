@@ -133,7 +133,7 @@
 
   $: if ($projectRequestStore.status === remote.Status.Success) {
     reset();
-    router.push({ type: "profile", activeTab: "following" });
+    router.push({ type: "profile" });
     notification.info({
       message: "You’ll be notified when this project has been found.",
     });
