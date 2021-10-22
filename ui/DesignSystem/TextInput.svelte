@@ -105,8 +105,7 @@
   input:focus,
   input:hover {
     background-color: var(--color-foreground-level-1);
-    border: 1px solid
-      var(--focus-outline-color, var(--color-foreground-level-3));
+    border: 1px solid var(--color-foreground-level-3);
     outline: none;
   }
 
