@@ -121,11 +121,14 @@
         type: "invalid",
         message: "That’s not a valid Radicle ID.",
       };
-      // Reset searches if the input became invalid.
-      reset();
     }
   } else {
     validationState = { type: "initial" };
+  }
+
+  // Reset searches if the input became invalid.
+  $: if (validationState.type !== "valid") {
+    reset();
   }
 
   $: if ($projectRequestStore.status === remote.Status.Success) {
