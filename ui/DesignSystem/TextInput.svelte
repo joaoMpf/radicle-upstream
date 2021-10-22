@@ -124,7 +124,7 @@
     margin: 0.75rem 0 0 0.75rem;
   }
 
-  .validation-row p {
+  .validation-row {
     color: var(--color-negative);
     text-align: left;
   }
@@ -175,7 +175,7 @@
 
   {#if validation && validation.status === Status.Error}
     <div class="validation-row">
-      <p>{validation.message}</p>
+      {validation.message}
     </div>
   {/if}
 </div>
