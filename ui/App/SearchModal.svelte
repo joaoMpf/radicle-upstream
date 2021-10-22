@@ -134,6 +134,7 @@
 <style>
   .container {
     width: 30rem;
+    height: 3rem;
   }
 
   .search-bar {
@@ -152,8 +153,6 @@
     background: var(--color-background);
     border-radius: 0.5rem;
     box-shadow: var(--color-shadows);
-    position: absolute;
-    width: 30rem;
     color: var(--color-foreground-level-6);
     padding: 1.5rem;
   }
