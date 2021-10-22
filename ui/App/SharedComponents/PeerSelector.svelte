@@ -149,8 +149,7 @@
         ? "maintainer"
         : selected.type === PeerType.Local
         ? "you"
-        : ""}
-      disableHovercard={true} />
+        : ""} />
     <div class="selector-expand">
       <Icon.ChevronUpDown
         style="vertical-align: bottom; fill: var(--color-foreground-level-4)" />

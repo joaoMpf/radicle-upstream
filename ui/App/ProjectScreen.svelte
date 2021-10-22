@@ -123,7 +123,7 @@
 
       <div slot="right" style="display: flex;">
         <div
-          style="display: flex;"
+          style="display: flex; z-index: 10;"
           class:button-transition={!peerSelectorExpanded}>
           <PeerSelector
             bind:expanded={peerSelectorExpanded}
