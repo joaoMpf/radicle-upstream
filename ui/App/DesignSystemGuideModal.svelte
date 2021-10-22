@@ -462,11 +462,11 @@
 
         <div class="swatch">
           <TextInput
-            placeholder="And I'm an input with a validation error."
+            placeholder="I'm an input with a validation error."
             style="flex: 1"
             validation={{
               status: ValidationStatus.Error,
-              message: "Well, that didn't go well...",
+              message: "That doesn't look good!",
             }} />
         </div>
 
