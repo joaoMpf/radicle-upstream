@@ -30,7 +30,7 @@
 
   import ProjectStats from "ui/App/SharedComponents/ProjectStats.svelte";
 
-  export let inputValue: string = "";
+  export let searchQuery: string = "";
 
   const projectRequestStore = remote.createStore<proxyProject.Request>();
   const projectSearchStore = remote.createStore<proxyProject.Project>();
@@ -90,7 +90,7 @@
 
   function follow() {
     if (validationState.type === "valid") {
-      requestProject(sanitizedInputValue);
+      requestProject(sanitizedSearchQuery);
     }
   }
 
@@ -99,16 +99,18 @@
     | { type: "valid" }
     | { type: "invalid"; message: string } = { type: "initial" };
 
-  $: sanitizedInputValue = inputValue.trim();
+  $: sanitizedSearchQuery = searchQuery.trim();
 
   // Validate input entered, at the moment valid RadUrns are the only
   // acceptable input.
-  $: if (sanitizedInputValue && sanitizedInputValue.length > 0) {
-    const result = urn.extractSha1FromUrn(sanitizedInputValue);
+  $: if (sanitizedSearchQuery && sanitizedSearchQuery.length > 0) {
+    const result = urn.extractSha1FromUrn(sanitizedSearchQuery);
 
     if (result.isUrnValid) {
       validationState = { type: "valid" };
-    } else if (VALID_PEER_MATCH.test(sanitizedInputValue)) {
+      // Load and show project metadata.
+      searchProject(sanitizedSearchQuery);
+    } else if (VALID_PEER_MATCH.test(sanitizedSearchQuery)) {
       validationState = {
         type: "invalid",
         message:
@@ -119,23 +121,13 @@
         type: "invalid",
         message: "That’s not a valid Radicle ID.",
       };
+      // Reset searches if the input became invalid.
+      reset();
     }
   } else {
     validationState = { type: "initial" };
   }
 
-  // To support quick pasting, request the urn once valid to get tracking
-  // information.
-  $: if (validationState.type === "valid") {
-    searchProject(sanitizedInputValue);
-  }
-
-  // Reset searches if the input became invalid.
-  $: if (validationState.type !== "valid") {
-    reset();
-  }
-
-  // Fire notification when a request has been created.
   $: if ($projectRequestStore.status === remote.Status.Success) {
     reset();
     router.push({ type: "profile", activeTab: "following" });
@@ -200,7 +192,7 @@
       style="flex: 1;"
       inputStyle="border: 0;"
       autofocus
-      bind:value={inputValue}
+      bind:value={searchQuery}
       on:keydown={onKeydown}
       placeholder="Enter a project’s Radicle ID here…"
       hint={validationState.type === "valid" ? "↵" : ""} />
@@ -233,7 +225,7 @@
       <div style="padding: 1.5rem;">
         <h3 class="header">
           <CopyableIdentifier
-            value={sanitizedInputValue}
+            value={sanitizedSearchQuery}
             kind="radicleId"
             showIcon={false} />
           <FollowToggle on:follow={follow} style="margin-left: 1rem;" />

@@ -73,5 +73,5 @@ const handleMessage = (message: ipc.CustomProtocolInvocation): void => {
     return;
   }
 
-  modal.show(SearchModal, () => {}, { inputValue: urn });
+  modal.show(SearchModal, () => {}, { searchQuery: urn });
 };
